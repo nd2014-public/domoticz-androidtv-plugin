@@ -36,7 +36,7 @@ class BasePlugin:
 
         if (len(Devices) == 0):
 
-            Domoticz.Device(Name="Running App",  Unit=1, TypeName="Selector Switch", Options = { "LevelActions": "||", "LevelNames": "Off|Test|Intrusion", "LevelOffHidden": "false", "SelectorStyle": "1" }).Create()
+            Domoticz.Device(Name="Running App",  Unit=1, TypeName="Alert").Create()
 
             logDebugMessage("Devices created.")
 
@@ -54,17 +54,17 @@ class BasePlugin:
         # YouTube ? Which video ?
         # TV ? Which channel / program ?
         # Other app ? Which one ?
-        runningApp = 'Other app'
+        running_app = 'Other app'
         if (result.find('com.android.tv.MainActivity') > -1):
-            runningApp = "TV"
+            running_app = "TV"
         elif (result.find('kodi') > -1):
-            runningApp = "Kodi"
+            running_app = "Kodi"
         elif (result.find('youtube.tvkids') > -1):
-            runningApp = "YouTube Kids"
+            running_app = "YouTube Kids"
         elif (result.find('youtube') > -1):
-            runningApp = "YouTube"
+            running_app = "YouTube"
 
-        Devices[1].Update(sValue=str(runningApp))
+        Devices[1].Update(nValue=1, sValue=str(running_app))
 
         return True
 
