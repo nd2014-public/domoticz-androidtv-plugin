@@ -24,7 +24,8 @@ import datetime
 import urllib.request
 import urllib.error
 import subprocess
-import os 
+import os
+import re
 
 class BasePlugin:
 
@@ -75,6 +76,16 @@ class BasePlugin:
             running_app = "OCS"
         elif (result.find('leanbacklauncher.MainActivity') > -1):
             running_app = "AndroidTV Off / SplashScreen"
+
+        if (running_app == "Freebox Replay")
+            # {act=android.intent.action.VIEW dat=vodservice://6play flg=0x10000000 cmp=fr.freebox.qmllauncher/fr.freebox.QmlLauncher}
+            # Detect : 6play :
+            log = str(subprocess.check_output("adb logcat | grep 'qmllauncher'", shell=True))
+            vod_search = re.search('android.intent.action.VIEW dat=vodservice://(.*) flg=', log, re.IGNORECASE)
+            if vod_search:
+                running_app = running_app + ' - ' + vod_search.group(1)
+
+
         Devices[1].Update(nValue=1, sValue=str(running_app))
 
         return True
