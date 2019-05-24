@@ -57,16 +57,22 @@ class BasePlugin:
         running_app = 'Other app'
         if (result.find('com.android.tv.MainActivity') > -1):
             running_app = "TV"
-        elif (result.find('kodi') > -1):
+        elif (result.find('fr.freebox.catchupstore') > -1):
+            running_app = "Freebox Replay"
+        elif (result.find('org.xbmc.kodi') > -1):
             running_app = "Kodi"
         elif (result.find('youtube.tvkids') > -1):
             running_app = "YouTube Kids"
-        elif (result.find('youtube') > -1):
+        elif (result.find('com.google.android.youtube.tv') > -1):
             running_app = "YouTube"
+        elif (result.find('tv.molotov.app') > -1):
+            running_app = "Molotov"
+        elif (result.find('com.canal.android.canal') > -1):
+            running_app = "MyCanal"
+        elif (result.find('com.orange.ocsgo') > -1):
+            running_app = "OCS"
         elif (result.find('leanbacklauncher.MainActivity') > -1):
-            running_app = "TV Off"
-            
-
+            running_app = "AndroidTV Off / SplashScreen"
         Devices[1].Update(nValue=1, sValue=str(running_app))
 
         return True
