@@ -49,7 +49,7 @@ class BasePlugin:
     def onHeartbeat(self):
 
         # Get Activity running on AndroidTV :
-        result = str(subprocess.check_output("adb shell dumpsys window windows | grep -E 'mCurrentFocus|mFocusedApp'", shell=True))
+        result = str(subprocess.check_output("adb shell dumpsys window windows |grep -E 'mCurrentFocus|mFocusedApp'", shell=True))
 
         # Kodi ? Which media ?
         # YouTube ? Which video ?
@@ -77,10 +77,12 @@ class BasePlugin:
         elif (result.find('leanbacklauncher.MainActivity') > -1):
             running_app = "AndroidTV Off / SplashScreen"
 
-        if (running_app == "Freebox Replay")
+        if (running_app == "Freebox Replay"):
             # {act=android.intent.action.VIEW dat=vodservice://6play flg=0x10000000 cmp=fr.freebox.qmllauncher/fr.freebox.QmlLauncher}
             # Detect : 6play :
-            log = str(subprocess.check_output("adb logcat | grep 'qmllauncher'", shell=True))
+            log = str(subprocess.check_output("adb logcat |grep -E 'qmllauncher'", shell=True))
+
+    #     ityManager: START u0 {act=android.intent.action.VIEW dat=vodservice://6play flg=0x10000000 cmp=fr.freebox.qmllauncher/fr.free
             vod_search = re.search('android.intent.action.VIEW dat=vodservice://(.*) flg=', log, re.IGNORECASE)
             if vod_search:
                 running_app = running_app + ' - ' + vod_search.group(1)
