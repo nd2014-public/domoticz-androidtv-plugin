@@ -1,9 +1,8 @@
-#           Fronius Inverter Plugin
+#           AndroidTV Plugin
 #
-#           Author:     ADJ, 2018
+#           Author:     M. Salles, 2019
 #
-# http://denvycom.com/blog/playing-audio-over-bluetooth-on-rasbperry-pi-command-line/
-# https://www.domoticz.com/wiki/BTAudio
+
 """
 <plugin key="AndroidTVPlugin" name="AndroidTV" author="MSALLES" version="0.0.1" wikilink="https://github.com/nd2014public/domoticz-androidtv-plugin.git">
     <params>
@@ -49,20 +48,20 @@ class BasePlugin:
     def onHeartbeat(self):
 
         # Get Activity running on AndroidTV :
-        result = subprocess.check_output("adb shell dumpsys window windows | grep -E 'mCurrentFocus|mFocusedApp'", shell=True)
+        result = str(subprocess.check_output("adb shell dumpsys window windows | grep -E 'mCurrentFocus|mFocusedApp'", shell=True))
 
         # Kodi ? Which media ?
         # YouTube ? Which video ?
         # TV ? Which channel / program ?
         # Other app ? Which one ?
-        runningApp = result
-        if (result.find('com.android.tv.MainActivity') != -1):
+        runningApp = 'Other app'
+        if (result.find('com.android.tv.MainActivity') > -1):
             runningApp = "TV"
-        else if (result.find('kodi') != -1):
+        elif (result.find('kodi') > -1):
             runningApp = "Kodi"
-        else if (result.find('youtube.tvkids') != -1):
+        elif (result.find('youtube.tvkids') > -1):
             runningApp = "YouTube Kids"
-        else if (result.find('youtube') != -1):
+        elif (result.find('youtube') > -1):
             runningApp = "YouTube"
 
         Devices[1].Update(sValue=str(runningApp))
