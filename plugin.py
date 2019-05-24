@@ -59,6 +59,8 @@ class BasePlugin:
             running_app = "TV"
         elif (result.find('fr.freebox.catchupstore') > -1):
             running_app = "Freebox Replay"
+        elif (result.find('fr.freebox.qmllauncher') > -1):
+            running_app = "Freebox Replay"
         elif (result.find('org.xbmc.kodi') > -1):
             running_app = "Kodi"
         elif (result.find('youtube.tvkids') > -1):
