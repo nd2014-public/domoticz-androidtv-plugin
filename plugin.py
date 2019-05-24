@@ -63,6 +63,9 @@ class BasePlugin:
             running_app = "YouTube Kids"
         elif (result.find('youtube') > -1):
             running_app = "YouTube"
+        elif (result.find('leanbacklauncher.MainActivity') > -1):
+            running_app = "TV Off"
+            
 
         Devices[1].Update(nValue=1, sValue=str(running_app))
 
