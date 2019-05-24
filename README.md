@@ -6,8 +6,7 @@ A Domoticz plugin to get informations and act on your AndroidTV.
 ### Prerequisite on AndroidTV
 
 Do not forget to go to Settings > About. Click 7 times on "Build" to activate developper mode.
-Then go to Developper tools and set debug mode on.
-You have to be connected through WiFi.
+Then go to Developper tools and set usb debug mode on.
 
 ### Plugin installation
 
@@ -22,3 +21,15 @@ The only hardware is your Android TV box. It will create devices to get informat
 
 This plugin is still in development, not ready to go live now.
 
+
+### Wanted capabilities
+
+[X] Get current app running (TV, Kodi, Youtube, etc)
+[ ] Launch an app from Domoticz
+[ ] 
+
+### Devices
+
+[X] Alert containing running app
+[ ] Trigger to launch an app
+[ ] 
