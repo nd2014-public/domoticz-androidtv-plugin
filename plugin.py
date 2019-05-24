@@ -30,6 +30,7 @@ import re
 class BasePlugin:
 
     def onStart(self):
+        Domoticz.Heartbeat(60)
         if Parameters["Mode6"] != "Normal":
             Domoticz.Debugging(1)
 
@@ -78,13 +79,10 @@ class BasePlugin:
             running_app = "AndroidTV Off / SplashScreen"
 
         if (running_app == "Freebox Replay"):
-            # {act=android.intent.action.VIEW dat=vodservice://6play flg=0x10000000 cmp=fr.freebox.qmllauncher/fr.freebox.QmlLauncher}
-            # Detect : 6play :
-            log = str(subprocess.check_output("adb logcat |grep -E 'qmllauncher'", shell=True))
-
-    #     ityManager: START u0 {act=android.intent.action.VIEW dat=vodservice://6play flg=0x10000000 cmp=fr.freebox.qmllauncher/fr.free
+            log = str(subprocess.check_output("adb logcat -d -t 5000 |grep -E 'vodservice'", shell=True))
             vod_search = re.search('android.intent.action.VIEW dat=vodservice://(.*) flg=', log, re.IGNORECASE)
             if vod_search:
+                print("VOD found ...", vod_search)
                 running_app = running_app + ' - ' + vod_search.group(1)
 
 
