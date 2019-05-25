@@ -49,6 +49,15 @@ class BasePlugin:
 
     def onHeartbeat(self):
 
+
+        # Get wake or asleep :
+        wake_state = 'asleep' 
+        result = str(subprocess.check_output("adb shell dumpsys power |grep 'mWakefulness', shell=True))
+        if (result.find('mWakefulness=Awake') > -1):
+            wake_state='awake'
+            running_app = ""
+        
+
         # Get Activity running on AndroidTV :
         result = str(subprocess.check_output("adb shell dumpsys window windows |grep -E 'mCurrentFocus|mFocusedApp'", shell=True))
 
@@ -56,34 +65,38 @@ class BasePlugin:
         # YouTube ? Which video ?
         # TV ? Which channel / program ?
         # Other app ? Which one ?
-        running_app = 'Other app'
-        if (result.find('com.android.tv.MainActivity') > -1):
-            running_app = "TV"
-        elif (result.find('fr.freebox.catchupstore') > -1):
-            running_app = "Freebox Replay"
-        elif (result.find('fr.freebox.qmllauncher') > -1):
-            running_app = "Freebox Replay"
-        elif (result.find('org.xbmc.kodi') > -1):
-            running_app = "Kodi"
-        elif (result.find('youtube.tvkids') > -1):
-            running_app = "YouTube Kids"
-        elif (result.find('com.google.android.youtube.tv') > -1):
-            running_app = "YouTube"
-        elif (result.find('tv.molotov.app') > -1):
-            running_app = "Molotov"
-        elif (result.find('com.canal.android.canal') > -1):
-            running_app = "MyCanal"
-        elif (result.find('com.orange.ocsgo') > -1):
-            running_app = "OCS"
-        elif (result.find('leanbacklauncher.MainActivity') > -1):
-            running_app = "AndroidTV Off / SplashScreen"
+        if (wake_state == 'awake'):
+            running_app = 'Other app'
+            if (result.find('com.android.tv.MainActivity') > -1):
+                running_app = "TV"
+            elif (result.find('fr.freebox.catchupstore') > -1):
+                running_app = "Freebox Replay"
+            elif (result.find('fr.freebox.qmllauncher') > -1):
+                running_app = "Freebox Replay"
+            elif (result.find('org.xbmc.kodi') > -1):
+                running_app = "Kodi"
+            elif (result.find('youtube.tvkids') > -1):
+                running_app = "YouTube Kids"
+            elif (result.find('com.google.android.youtube.tv') > -1):
+                running_app = "YouTube"
+            elif (result.find('tv.molotov.app') > -1):
+                running_app = "Molotov"
+            elif (result.find('com.canal.android.canal') > -1):
+                running_app = "MyCanal"
+            elif (result.find('com.orange.ocsgo') > -1):
+                running_app = "OCS"
+            elif (result.find('leanbacklauncher.MainActivity') > -1):
+                running_app = "SplashScreen"
 
-        if (running_app == "Freebox Replay"):
-            log = str(subprocess.check_output("adb logcat -d -t 5000 |grep -E 'vodservice'", shell=True))
-            vod_search = re.search('android.intent.action.VIEW dat=vodservice://(.*) flg=', log, re.IGNORECASE)
-            if vod_search:
-                print("VOD found ...", vod_search)
-                running_app = running_app + ' - ' + vod_search.group(1)
+            if (running_app == "Freebox Replay"):
+                log = str(subprocess.check_output("adb logcat -d -t 5000 |grep -E 'vodservice'", shell=True))
+                vod_search = re.search('android.intent.action.VIEW dat=vodservice://(.*) flg=', log, re.IGNORECASE)
+                if vod_search:
+                    print("VOD found ...", vod_search)
+                    running_app = running_app + ' - ' + vod_search.group(1)
+
+        else:
+            running_app = 'TV Off/Asleep'
 
 
         Devices[1].Update(nValue=1, sValue=str(running_app))

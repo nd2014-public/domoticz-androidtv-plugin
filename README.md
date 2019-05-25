@@ -10,10 +10,11 @@ Then go to Developper tools and set usb debug mode on.
 
 ### Plugin installation
 
+```
 pip install androidtv
 git clone https://github.com/nd2014-public/domoticz-androidtv-plugin.git
 service domoticz restart
-
+```
 
 ## Hardware & Devices
 
@@ -24,12 +25,16 @@ This plugin is still in development, not ready to go live now.
 
 ### Wanted capabilities
 
+```
 [X] Get current app running (TV, Kodi, Youtube, etc)
 [ ] Launch an app from Domoticz
 [ ] 
+```
 
 ### Devices
 
+```
 [X] Alert containing running app
 [ ] Trigger to launch an app
 [ ] 
+```
