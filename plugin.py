@@ -52,20 +52,22 @@ class BasePlugin:
 
         # Get wake or asleep :
         wake_state = 'asleep' 
-        result = str(subprocess.check_output("adb shell dumpsys power |grep 'mWakefulness', shell=True))
+        running_app = 'TV Off/Asleep'
+        result = str(subprocess.check_output("adb shell dumpsys power |grep 'mWakefulness'", shell=True, timeout=10))
         if (result.find('mWakefulness=Awake') > -1):
             wake_state='awake'
-            running_app = ""
+            running_app = 'Other app'
         
 
         # Get Activity running on AndroidTV :
-        result = str(subprocess.check_output("adb shell dumpsys window windows |grep -E 'mCurrentFocus|mFocusedApp'", shell=True))
+        result = str(subprocess.check_output("adb shell dumpsys window windows |grep -E 'mCurrentFocus|mFocusedApp'", shell=True, timeout=10))
 
         # Kodi ? Which media ?
         # YouTube ? Which video ?
         # TV ? Which channel / program ?
         # Other app ? Which one ?
         if (wake_state == 'awake'):
+
             running_app = 'Other app'
             if (result.find('com.android.tv.MainActivity') > -1):
                 running_app = "TV"
@@ -89,7 +91,7 @@ class BasePlugin:
                 running_app = "SplashScreen"
 
             if (running_app == "Freebox Replay"):
-                log = str(subprocess.check_output("adb logcat -d -t 5000 |grep -E 'vodservice'", shell=True))
+                log = str(subprocess.check_output("adb logcat -d -t 5000 |grep -E 'vodservice'", shell=True, timeout=10))
                 vod_search = re.search('android.intent.action.VIEW dat=vodservice://(.*) flg=', log, re.IGNORECASE)
                 if vod_search:
                     print("VOD found ...", vod_search)
