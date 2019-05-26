@@ -101,7 +101,11 @@ class BasePlugin:
                     running_app_channel = vod_search.group(1)
             elif (running_app == "TV"):
                 log = str(subprocess.check_output("adb logcat -d -t 5000 |grep -E 'open rtsp://rtsp-server/fbxtv_priv/stream' |tail -n 1", shell=True, timeout=10))
-                service_no = re.search('service=([0-9]+)', log, re.IGNORECASE).group(1)
+                service_no = re.search('service=([0-9]+)', log, re.IGNORECASE)
+                if (service_no):
+                    service_no = service_no.group(1)
+                else:
+                    service_no = ""
                 print("Service :", service_no)
                 if service_no == '612':
                     running_app_channel = "TF1"
@@ -164,8 +168,12 @@ class BasePlugin:
             else:
                 running_app_channel = "None"
 
-            log = str(subprocess.check_output("adb logcat -d -t 5000 |grep -E '\[MediaAttributes: ' |tail -n 1", shell=True, timeout=10))
-            running_app_infos = re.search('\[MediaAttributes: (*+)\]', log, re.IGNORECASE).group(1)
+            log = str(subprocess.check_output("adb logcat -d -t 5000 |grep -E 'MediaAttributes: ' |tail -n 1", shell=True, timeout=10))
+            running_app_infos = re.search('MediaAttributes: (.+) - ', log, re.IGNORECASE)
+            if (running_app_infos):
+                running_app_infos = running_app_infos.group(1)
+            else:
+                running_app_infos = "None"
             print("Infos :", running_app_infos)
             
 
