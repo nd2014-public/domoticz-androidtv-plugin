@@ -37,8 +37,8 @@ class BasePlugin:
         subprocess.run(["adb", "connect", Parameters["Mode1"]+":5555"])
 
         if (len(Devices) == 0):
-            Domoticz.Device(Name="Running App",  Unit=1, TypeName="Text", Options=Options).Create()
-            Domoticz.Device(Name="Running App Infos",  Unit=2, TypeName="Text", Options=Options).Create()
+            Domoticz.Device(Name="Running App",  Unit=1, TypeName="Text").Create()
+            Domoticz.Device(Name="Running App Infos",  Unit=2, TypeName="Text").Create()
 
             logDebugMessage("Devices created.")
 
@@ -53,6 +53,7 @@ class BasePlugin:
         # Get wake or asleep :
         wake_state = 'asleep' 
         running_app = 'TV Off/Asleep'
+        running_app_infos = "None"
         result = str(subprocess.check_output("adb shell dumpsys power |grep 'mWakefulness'", shell=True, timeout=10))
         if (result.find('mWakefulness=Awake') > -1):
             wake_state='awake'
@@ -91,15 +92,15 @@ class BasePlugin:
                 running_app = "SplashScreen"
 
             if (running_app == "Freebox Replay"):
-                log = str(subprocess.check_output("adb logcat -d -t 5000 |grep -E 'vodservice' | tail -n 1", shell=True, timeout=10))
+                log = str(subprocess.check_output("adb logcat -d -t 5000 |grep -E 'vodservice' |tail -n 1", shell=True, timeout=10))
                 vod_search = re.search('android.intent.action.VIEW dat=vodservice://(.*) flg=', log, re.IGNORECASE)
                 if vod_search:
                     print("VOD found ...", vod_search)
                     running_app_infos = vod_search.group(1)
             elif (running_app == "TV"):
-                log = str(subprocess.check_output("adb logcat -d -t 5000 |grep -E 'open rtsp://rtsp-server/fbxtv_priv/stream' | tail -n 1", shell=True, timeout=10))
-                service_no = re.search('service=([0-9]+)', log, re.IGNORECASE)
-                print "Service :", service_no
+                log = str(subprocess.check_output("adb logcat -d -t 5000 |grep -E 'open rtsp://rtsp-server/fbxtv_priv/stream' |tail -n 1", shell=True, timeout=10))
+                service_no = re.search('service=([0-9]+)', log, re.IGNORECASE).group(1)
+                print("Service :", service_no)
                 if service_no == '612':
                     running_app_infos = "TF1"
                 if service_no == '201':
