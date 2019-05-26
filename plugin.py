@@ -166,13 +166,14 @@ class BasePlugin:
                     running_app_channel = "Paris Première"
                 if service_no == '210':
                     running_app_channel = "RTL9"
+
+                log = str(subprocess.check_output("adb logcat -d -t 5000 |grep -E 'MediaAttributes: ' |tail -n 1", shell=True, timeout=10))
+                running_app_infos = re.search('MediaAttributes: (.+) - ', log, re.IGNORECASE)
+                if (running_app_infos):
+                    running_app_infos = running_app_infos.group(1)            
             else:
                 running_app_channel = "None"
 
-            log = str(subprocess.check_output("adb logcat -d -t 5000 |grep -E 'MediaAttributes: ' |tail -n 1", shell=True, timeout=10))
-            running_app_infos = re.search('MediaAttributes: (.+) - ', log, re.IGNORECASE)
-            if (running_app_infos):
-                running_app_infos = running_app_infos.group(1)            
 
         else:
             running_app = 'TV Off/Asleep'
