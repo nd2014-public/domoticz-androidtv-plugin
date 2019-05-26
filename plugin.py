@@ -40,6 +40,7 @@ class BasePlugin:
             Domoticz.Device(Name="Running App",  Unit=1, TypeName="Text").Create()
             Domoticz.Device(Name="Running App Channel",  Unit=2, TypeName="Text").Create()
             Domoticz.Device(Name="Running App Program",  Unit=3, TypeName="Text").Create()
+            Domoticz.Device(Name="Running package",  Unit=4, TypeName="Text").Create()
 
             logDebugMessage("Devices created.")
 
@@ -53,6 +54,7 @@ class BasePlugin:
 
         # Get wake or asleep :
         wake_state = 'asleep' 
+        running_package = 'None'
         running_app = 'TV Off/Asleep'
         running_app_channel = "None"
         running_app_infos = "None"
@@ -61,6 +63,15 @@ class BasePlugin:
             wake_state='awake'
             running_app = 'Other app'
         
+        # Running package :
+        log = str(subprocess.check_output("adb shell dumpsys window windows |grep -E 'mCurrentFocus'", shell=True, timeout=10))
+        current_focus = re.search('SubPanel:(.*)/', log, re.IGNORECASE)
+                if (current_focus):
+                    running_package = current_focus.group(1)
+                else:
+                    running_package = ""
+        
+
 
         # Get Activity running on AndroidTV :
         result = str(subprocess.check_output("adb shell dumpsys window windows |grep -E 'mCurrentFocus|mFocusedApp'", shell=True, timeout=10))
@@ -181,6 +192,7 @@ class BasePlugin:
         Devices[1].Update(nValue=1, sValue=str(running_app))
         Devices[2].Update(nValue=1, sValue=str(running_app_channel))
         Devices[3].Update(nValue=1, sValue=str(running_app_infos))
+        Devices[4].Update(nValue=1, sValue=str(running_package))
         return True
 
     def logErrorCode(self, jsonObject):
