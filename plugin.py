@@ -182,6 +182,19 @@ class BasePlugin:
                 running_app_infos = re.search('MediaAttributes: (.+) - ', log, re.IGNORECASE)
                 if (running_app_infos):
                     running_app_infos = running_app_infos.group(1)            
+
+            elif (running_app == "YouTube"):
+                log = str(subprocess.check_output("adb logcat -d -t 5000 |grep -E 'MediaAttributes: ' |tail -n 1", shell=True, timeout=10))
+                running_app_infos = re.search('MediaAttributes: (.+) - ', log, re.IGNORECASE)
+                if (running_app_infos):
+                    running_app_infos = running_app_infos.group(1)            
+
+            elif (running_app == "YouTube Kids"):
+                log = str(subprocess.check_output("adb logcat -d -t 5000 |grep -E 'MediaAttributes: ' |tail -n 1", shell=True, timeout=10))
+                running_app_infos = re.search('MediaAttributes: (.+) - ', log, re.IGNORECASE)
+                if (running_app_infos):
+                    running_app_infos = running_app_infos.group(1)            
+
             else:
                 running_app_channel = "None"
 
