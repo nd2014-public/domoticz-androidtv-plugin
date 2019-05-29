@@ -36,6 +36,8 @@ class BasePlugin:
 
         subprocess.run(["adb", "connect", Parameters["Mode1"]+":5555"])
 
+        if ('AndroidTVPlugin'  not in Images): Domoticz.Image('AndroidTVPlugin Icons.zip').Create()
+
         if (len(Devices) == 0):
             Domoticz.Device(Name="Running App",  Unit=1, TypeName="Text").Create()
             Domoticz.Device(Name="Running App Channel",  Unit=2, TypeName="Text").Create()
@@ -65,7 +67,7 @@ class BasePlugin:
         
         # Running package :
         log = str(subprocess.check_output("adb shell dumpsys window windows |grep -E 'mCurrentFocus'", shell=True, timeout=10))
-        current_focus = re.search(' (.*)/', log, re.IGNORECASE)
+        current_focus = re.search('[^ :]*/', log, re.IGNORECASE)
         if (current_focus):
             running_package = current_focus.group(1)
         else:
@@ -178,20 +180,20 @@ class BasePlugin:
                 if service_no == '210':
                     running_app_channel = "RTL9"
 
-                log = str(subprocess.check_output("adb logcat -d -t 5000 |grep -E 'MediaAttributes: ' |tail -n 1", shell=True, timeout=10))
-                running_app_infos = re.search('MediaAttributes: (.+) - ', log, re.IGNORECASE)
+                log = str(subprocess.check_output("adb logcat -d -t 100000 |grep -E 'MediaAttributes: ' |tail -n 1", shell=True, timeout=10))
+                running_app_infos = re.search('MediaAttributes: (.+) - by ', log, re.IGNORECASE)
                 if (running_app_infos):
                     running_app_infos = running_app_infos.group(1)            
 
             elif (running_app == "YouTube"):
-                log = str(subprocess.check_output("adb logcat -d -t 5000 |grep -E 'MediaAttributes: ' |tail -n 1", shell=True, timeout=10))
-                running_app_infos = re.search('MediaAttributes: (.+) - ', log, re.IGNORECASE)
+                log = str(subprocess.check_output("adb logcat -d -t 100000 |grep -E 'MediaAttributes: ' |tail -n 1", shell=True, timeout=10))
+                running_app_infos = re.search('MediaAttributes: (.+) - by ', log, re.IGNORECASE)
                 if (running_app_infos):
                     running_app_infos = running_app_infos.group(1)            
 
             elif (running_app == "YouTube Kids"):
-                log = str(subprocess.check_output("adb logcat -d -t 5000 |grep -E 'MediaAttributes: ' |tail -n 1", shell=True, timeout=10))
-                running_app_infos = re.search('MediaAttributes: (.+) - ', log, re.IGNORECASE)
+                log = str(subprocess.check_output("adb logcat -d -t 100000 |grep -E 'MediaAttributes: ' |tail -n 1", shell=True, timeout=10))
+                running_app_infos = re.search('MediaAttributes: (.+) - by ', log, re.IGNORECASE)
                 if (running_app_infos):
                     running_app_infos = running_app_infos.group(1)            
 
