@@ -39,10 +39,10 @@ class BasePlugin:
         if ('AndroidTVPlugin'  not in Images): Domoticz.Image('AndroidTVPlugin Icons.zip').Create()
 
         if (len(Devices) == 0):
-            Domoticz.Device(Name="Running App",  Unit=1, TypeName="Text").Create()
-            Domoticz.Device(Name="Running App Channel",  Unit=2, TypeName="Text").Create()
-            Domoticz.Device(Name="Running App Program",  Unit=3, TypeName="Text").Create()
-            Domoticz.Device(Name="Running package",  Unit=4, TypeName="Text").Create()
+            Domoticz.Device(Name="Running App",  Unit=1, TypeName="Text", Image=8).Create()
+            Domoticz.Device(Name="Running App Channel",  Unit=2, TypeName="Text", Image=8).Create()
+            Domoticz.Device(Name="Running App Program",  Unit=3, TypeName="Text", Image=8).Create()
+            Domoticz.Device(Name="Running package",  Unit=4, TypeName="Text", Image=8).Create()
 
             logDebugMessage("Devices created.")
 
