@@ -67,7 +67,7 @@ class BasePlugin:
         
         # Running package :
         log = str(subprocess.check_output("adb shell dumpsys window windows |grep -E 'mCurrentFocus'", shell=True, timeout=10))
-        current_focus = re.search('([^ :])*/', log, re.IGNORECASE)
+        current_focus = re.search('([^ :]*)/', log, re.IGNORECASE)
         if (current_focus):
             running_package = current_focus.group(1)
         else:
