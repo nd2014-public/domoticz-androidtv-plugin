@@ -181,25 +181,21 @@ class BasePlugin:
                     running_app_channel = "RTL9"
 
                 log = str(subprocess.check_output("adb logcat -d -t 100000 |grep -E 'MediaAttributes: ' |tail -n 1", shell=True, timeout=10))
-                running_app_infos = re.search('MediaAttributes: (.+) - by ', log, re.IGNORECASE)
+                running_app_infos = re.search('MediaAttributes: (.+) - (.*)by ', log, re.IGNORECASE)
                 if (running_app_infos):
-                    running_app_infos = running_app_infos.group(1)            
+                    running_app_infos = running_app_infos.group(1)
 
-            elif (running_app == "YouTube"):
+            elif (running_app == "YouTube" or running_app == "YouTube Kids"):
                 log = str(subprocess.check_output("adb logcat -d -t 100000 |grep -E 'MediaAttributes: ' |tail -n 1", shell=True, timeout=10))
-                running_app_infos = re.search('MediaAttributes: (.+) - by ', log, re.IGNORECASE)
+                running_app_infos = re.search('MediaAttributes: (.+) - (.*)by ', log, re.IGNORECASE)
                 if (running_app_infos):
-                    running_app_infos = running_app_infos.group(1)            
-
-            elif (running_app == "YouTube Kids"):
-                log = str(subprocess.check_output("adb logcat -d -t 100000 |grep -E 'MediaAttributes: ' |tail -n 1", shell=True, timeout=10))
-                running_app_infos = re.search('MediaAttributes: (.+) - by ', log, re.IGNORECASE)
-                if (running_app_infos):
-                    running_app_infos = running_app_infos.group(1)            
+                    running_app_infos = running_app_infos.group(1)
+                running_app_channel = re.search('MediaAttributes: (.+) - (.*)by (.+) \(', log, re.IGNORECASE)
+                if (running_app_channel):
+                    running_app_channel = running_app_channel.group(3)
 
             else:
                 running_app_channel = "None"
-
 
         else:
             running_app = 'TV Off/Asleep'
